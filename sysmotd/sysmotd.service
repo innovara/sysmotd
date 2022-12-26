@@ -1,0 +1,9 @@
+[Unit]
+Description=sysmotd service to update MOTD
+
+[Service]
+Type=oneshot
+User=root
+Group=root
+RemainAfterExit=no
+ExecStart=/usr/libexec/sysmotd
