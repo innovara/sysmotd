@@ -10,7 +10,7 @@ As of time of writting, Fedora only uses pam_motd.so for ssh log ins.
 
 A picture is worth a thousand words.
 
-
+![sysmotd example](https://github.com/innovara/sysmotd/blob/master/sysmotd-example.png?raw=true)
 
 # Background
 
