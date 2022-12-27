@@ -76,9 +76,10 @@ systemd
 
 Most systems will have all of them installed apart from `figlet` and `lolcat`.
 
-To install sysmotd and its dependencies, my recommendation is to download the rpm package under `rpmbuild/RPMS/noarch` in this repo, and install it with dnf.
+To install sysmotd and its dependencies, my recommendation is to download the latest rpm package under releases (currently 0.0.1), and install it with dnf.
 
 ```
+wget https://github.com/innovara/sysmotd/releases/download/0.0.1/sysmotd-0.0.1-1.fc37.noarch.rpm
 sudo dnf install sysmotd-0.0.1-1.fc37.noarch.rpm
 ```
 
