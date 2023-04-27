@@ -33,15 +33,15 @@ hostname=$(uname -n)
 
 # uptime
 uptime=$(awk '{print int($1)}' /proc/uptime)
-upDays=$((uptime/60/60/24))
-upHours=$((uptime/60/60%24))
-upMins=$((uptime/60%60))
-upSecs=$((uptime%60))
+up_days=$((uptime/60/60/24))
+up_hours=$((uptime/60/60%24))
+up_mins=$((uptime/60%60))
+up_secs=$((uptime%60))
 
 # avg load
-load1=$(awk '{print $1}' /proc/loadavg)
-load5=$(awk '{print $2}' /proc/loadavg)
-load15=$(awk '{print $3}' /proc/loadavg)
+load_1=$(awk '{print $1}' /proc/loadavg)
+load_5=$(awk '{print $2}' /proc/loadavg)
+load_15=$(awk '{print $3}' /proc/loadavg)
 
 # memory
 mem_total=$(awk '/MemTotal/ {print $2;}' /proc/meminfo)
@@ -62,6 +62,13 @@ users=$(users | wc -w)
 # processes
 processes=$(ps aux --no-headers | wc -l)
 
+# SELinux
+se_status=$(sestatus | awk '/^SELinux status:/ {print $3;}')
+if [[ "$se_status" != "disabled" ]]; then
+       semode=$(sestatus | awk '/^Current mode/ {print ($3);}')
+       se_status="${se_status} (${semode})"
+fi
+
 ### MOTD ###
 
 # colourful header. Updated every 60 minutes only but no real performance gain
@@ -77,13 +84,14 @@ echo -e "Welcome to ${PRETTY_NAME} ($(uname -o) $(uname -r))
 
 System information as of $(date)
 
-Hostname:\t${hostname}\t\tMemory usage:\t$((${mem_used}/1024))/$((${mem_total}/1024))M (${mem_perc}%)
-Uptime:\t\t${upDays}d ${upHours}h ${upMins}m ${upSecs}s\t\t\tSwap usage:\t$((${swap_used}/1024))/$((${swap_total}/1024))M (${swap_perc}%)
-Load 1-5-15min:\t${load1}-${load5}-${load15}\t\t\tUsage of /:\t${root_used}/${root_total} (${root_perc})
-Processes:\t${processes}\t\t\t\tUsers:\t\t${users}
+Hostname:\t${hostname}
+Uptime:\t\t${up_days}d ${up_hours}h ${up_mins}m ${up_secs}s\t\t\tUsage of /:\t${root_used}/${root_total} (${root_perc})
+Load 1-5-15min:\t${load_1}-${load_5}-${load_15}\t\t\tSElinux:\t${se_status}
+Memory usage:\t$((${mem_used}/1024))/$((${mem_total}/1024))M (${mem_perc}%)\t\t\tProcesses:\t${processes}
+Swap usage:\t$((${swap_used}/1024))/$((${swap_total}/1024))M (${swap_perc}%)\t\t\tUsers:\t\t${users}
 " > $sysinfo
 
-# updates available updated every 60 minutes using CACHE.
+# available updates refreshes every 60 minutes using CACHE.
 # dnf's cache is updated by the system using its own service and timer. The conservative 
 # approach is to not to change this.
 NEED_UPDATE="FALSE"

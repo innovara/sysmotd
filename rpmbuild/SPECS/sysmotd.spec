@@ -1,5 +1,5 @@
 Name:           sysmotd
-Version:        0.0.1
+Version:        0.0.2
 Release:        1%{?dist}
 Summary:        Generates a MOTD (Message Of The Day) including system information on Fedora Linux
 BuildArch:      noarch
@@ -67,5 +67,8 @@ rm -f /run/motd.d/*%{name}*
 
 
 %changelog
+* Thu Apr 27 2023 Manuel Fombuena <mfombuena@innovara.co.uk>
+- Version 0.0.2 adding SElinux info
+
 * Mon Dec 26 2022 Manuel Fombuena <mfombuena@innovara.co.uk>
 - First version being packaged

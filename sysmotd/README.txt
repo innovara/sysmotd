@@ -2,7 +2,7 @@ Summary
 =======
 
 sysmotd is essentially a shell script that produces a Message Of The Day
-(MOTD) which includes system information and statistics.
+(MOTD) including system information and statistics.
 
 It has been developed and tested on Fedora Linux and it might work on
 other Red Hat-based distributions with very small tweaks. It should also
@@ -23,7 +23,7 @@ I am a long term Fedora user. Having worked with some Ubuntu servers
 lately, I found myself missing the system information and statistics
 that you get when you log in. When I installed Fedora 37 on a Raspberry
 Pi4, I saw that cockpit would generate a MOTD, and I decided to research
-a bit to find out if I could add my own with some system statistics on
+a bit to find out if I could add my own message with some system statistics in
 it.
 
 Out of the various sources I found, I would like to give credit to a
@@ -34,9 +34,9 @@ what tools to use.
 
 [2] https://gist.github.com/cha55son/6042560
 
-While these sources gave me a good start, I wanted to reduce the number
-of dependencies to a minimum and make the dynamic part of the MOTD as
-efficient as possible, so I soon re-wrote most of the stuff and started
+While those sources gave me a good start, I wanted to reduce the number
+of dependencies to a minimum and to make the dynamic part of the MOTD as
+efficient as possible. Hence I re-wrote re-wrote those and started
 looking into how to avoid using the user's profile to trigger the
 script. That leads us to the next section.
 
@@ -50,15 +50,15 @@ PAM configuration includes lines for static and dyanamic MOTDs.
 [3] https://wiki.debian.org/motd
 
 Using a patched version of pam\_motd.so would have been the preferred
-approach, since the script updating the dynamic part of the MOTD only
-runs when a user logs in. However, I didn't know how difficult it would
+approach since the script updating the dynamic part of the MOTD would only 
+run when a user logged in. However, I didn't know how difficult it would
 be to get a change like that approved for Fedora. My assumption was, and
 still is, that the people behind Fedora or Red Hat know that Debian and
 Ubuntu are using this dynamic MOTD approach and if they have not
 implemented it yet, it is because they have some valid reasons.
 
-In that context, I resorted to use a systemd service to call the script
-and a timer to call the service, every minute. However, not all the
+Having made that assumption, I resorted to use a systemd service to call 
+the script and a timer to call the service, every minute. However, not all the
 parts of the script that generate the corresponding part of the MOTD run
 every minute.
 
