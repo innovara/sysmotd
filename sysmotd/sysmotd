@@ -3,7 +3,7 @@
 #   sysmotd - generates a MOTD (Message Of The Day) including system 
 #   information on Fedora Linux, and possibly other Red Hat-based distributions.
 #   
-#   Copyright (C) 2022  Manuel Fombuena <mfombuena@innovara.co.uk>
+#   Copyright (C) 2022-2023  Manuel Fombuena <mfombuena@innovara.co.uk>
 #   
 #   This program is free software: you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License as published by
@@ -49,7 +49,11 @@ mem_used=$(($mem_total-$(awk '/MemFree/ {print $2;}' /proc/meminfo)-$(awk '/Buff
 mem_perc=$(($mem_used*100/$mem_total))
 swap_total=$(awk '/SwapTotal/ {print $2;}' /proc/meminfo)
 swap_used=$((${swap_total} - $(awk '/SwapFree/ {print $2;}' /proc/meminfo)-$(awk '/SwapCached/ {print $2;}' /proc/meminfo)))
-swap_perc=$((swap_used*100/swap_total))
+if [[ "$swap_total" != 0 ]]; then
+   swap_perc=$((swap_used*100/swap_total))
+else
+   swap_perc=0
+fi
 
 # filesystem info
 root_used=$(df -h --output=used / | awk '{if (NR!=1) print $1}')
@@ -65,9 +69,41 @@ processes=$(ps aux --no-headers | wc -l)
 # SELinux
 se_status=$(sestatus | awk '/^SELinux status:/ {print $3;}')
 if [[ "$se_status" != "disabled" ]]; then
-       semode=$(sestatus | awk '/^Current mode/ {print ($3);}')
-       se_status="${se_status} (${semode})"
+   se_mode=$(sestatus | awk '/^Current mode/ {print ($3);}')
 fi
+
+# input data for system info table (5x5)
+sysarray=()
+sysarray+=('Hostname:;') #r1 c1
+sysarray+=(${hostname}';') #r1 c2
+sysarray+=($'\t;') #r1 c3
+sysarray+=(';') #r1 c4
+sysarray+=(';') #r1 c5
+sysarray+=('Uptime:;') #r2 c1
+sysarray+=(${up_days}'d '${up_hours}'h '${up_mins}'m '${up_secs}'s;') #r2 c2
+sysarray+=($'\t;') #r2 c3
+sysarray+=('Usage of /:;') #r2 c4
+sysarray+=(${root_used}'/'${root_total}' ('${root_perc}');') #r2 c5
+sysarray+=('Load 1-5-15min:;') #r3 c1
+sysarray+=(${load_1}'-'${load_5}'-'${load_15}';') #r3 c2
+sysarray+=($'\t;') #r3 c3
+sysarray+=('SElinux:;') #r3 c4
+if [[ "$se_status" != "disabled" ]]; then
+   sysarray+=(${se_status}' ('${se_mode}');') #r3 c5
+else
+   sysarray+=(${se_status}';') #r3 c5
+fi
+sysarray+=('Memory usage:;') #r4 c1
+sysarray+=($((${mem_used}/1024))'/'$((${mem_total}/1024))'M;') #r4 c2
+sysarray+=($'\t;') #r4 c3
+sysarray+=('Processes:;') #r4 c4
+sysarray+=(${processes}';') #r4 c5
+sysarray+=('Swap usage:;') #r5 c1
+sysarray+=($((${swap_used}/1024))'/'$((${swap_total}/1024))'M ('${swap_perc}'%);') #r5 c2
+sysarray+=($'\t;') #r3 c3
+sysarray+=('Users:;') #r5 c4
+sysarray+=(${users}';') #r5 c5
+
 
 ### MOTD ###
 
@@ -76,20 +112,18 @@ NEED_UPDATE="FALSE"
 [ -z "$(find "$header" -newermt 'now-60 minutes' 2> /dev/null)" ] && NEED_UPDATE="TRUE"
 
 if [[ "$NEED_UPDATE" = "TRUE" ]]; then
-    echo "$(figlet ${REDHAT_SUPPORT_PRODUCT} ${REDHAT_SUPPORT_PRODUCT_VERSION} -c | lolcat -r -f)" > $header
+   echo "$(figlet ${REDHAT_SUPPORT_PRODUCT} ${REDHAT_SUPPORT_PRODUCT_VERSION} -c | lolcat -r -f)" > $header
 fi
 
 # sysinfo update
 echo -e "Welcome to ${PRETTY_NAME} ($(uname -o) $(uname -r))
 
 System information as of $(date)
-
-Hostname:\t${hostname}
-Uptime:\t\t${up_days}d ${up_hours}h ${up_mins}m ${up_secs}s\t\t\tUsage of /:\t${root_used}/${root_total} (${root_perc})
-Load 1-5-15min:\t${load_1}-${load_5}-${load_15}\t\t\tSElinux:\t${se_status}
-Memory usage:\t$((${mem_used}/1024))/$((${mem_total}/1024))M (${mem_perc}%)\t\t\tProcesses:\t${processes}
-Swap usage:\t$((${swap_used}/1024))/$((${swap_total}/1024))M (${swap_perc}%)\t\t\tUsers:\t\t${users}
 " > $sysinfo
+
+printf '%s %s %s %s %s\n' "${sysarray[@]}" | column -t -s $';' >> $sysinfo
+
+echo -e "" >> $sysinfo
 
 # available updates refreshes every 60 minutes using CACHE.
 # dnf's cache is updated by the system using its own service and timer. The conservative 
@@ -98,12 +132,12 @@ NEED_UPDATE="FALSE"
 [ -z "$(find "$updates" -newermt 'now-60 minutes' 2> /dev/null)" ] && NEED_UPDATE="TRUE"
 
 if [[ "$NEED_UPDATE" = "TRUE" ]]; then
-       n_updates=$(dnf update --assumeno --cacheonly --noplugins | awk '/^Upgrade/ {print $2;}')
-    if [[ $n_updates -eq 0 ]]; then
-       echo -e "There were no updates available when last checked.\n" > $updates
-    elif [[ $n_updates -eq 1 ]]; then
-       echo -e "There was 1 update available when last checked.\n" > $updates
-    else
-       echo -e "There were ${n_updates} updates available when last checked.\n" > $updates
-    fi
+   n_updates=$(dnf update --assumeno --cacheonly --noplugins | awk '/^Upgrade/ {print $2;}')
+   if [[ $n_updates -eq 0 ]]; then
+      echo -e "There were no updates available when last checked.\n" > $updates
+   elif [[ $n_updates -eq 1 ]]; then
+      echo -e "There was 1 update available when last checked.\n" > $updates
+   else
+      echo -e "There were ${n_updates} updates available when last checked.\n" > $updates
+   fi
 fi
