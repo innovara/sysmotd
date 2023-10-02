@@ -2,11 +2,11 @@ Summary
 =======
 
 sysmotd is essentially a shell script that produces a Message Of The Day
-(MOTD) including system information and statistics.
+(MOTD) that includes system information and statistics.
 
 It has been developed and tested on Fedora Linux and it might work on
 other Red Hat-based distributions with very small tweaks. It should also
-be relatively simple to port to other distributions that do not have
+be relatively simple to port it to other distributions that do not have
 their own dynamic MOTD generator.
 
 As of time of writting, Fedora only uses pam_motd.so for ssh log ins.
@@ -16,6 +16,8 @@ How it looks like
 
 A picture is worth a thousand words.
 
+https://github.com/innovara/sysmotd/blob/master/sysmotd-example.png
+
 Background
 ==========
 
@@ -23,12 +25,12 @@ I am a long term Fedora user. Having worked with some Ubuntu servers
 lately, I found myself missing the system information and statistics
 that you get when you log in. When I installed Fedora 37 on a Raspberry
 Pi4, I saw that cockpit would generate a MOTD, and I decided to research
-a bit to find out if I could add my own message with some system statistics in
+how I could add my own message with some system statistics in
 it.
 
 Out of the various sources I found, I would like to give credit to a
-couple that helped me a lot in getting the information that I wanted and
-what tools to use.
+couple of them that helped me a lot in figuring out how to get the information 
+that I wanted.
 
 [1] https://github.com/angela-d/motd-for-centos
 
@@ -36,8 +38,8 @@ what tools to use.
 
 While those sources gave me a good start, I wanted to reduce the number
 of dependencies to a minimum and to make the dynamic part of the MOTD as
-efficient as possible. Hence I re-wrote re-wrote those and started
-looking into how to avoid using the user's profile to trigger the
+efficient as possible. Hence I re-wrote those and started
+looking into how I could avoid using the user's profile to trigger the
 script. That leads us to the next section.
 
 Structure and how it works
@@ -59,8 +61,7 @@ implemented it yet, it is because they have some valid reasons.
 
 Having made that assumption, I resorted to use a systemd service to call 
 the script and a timer to call the service, every minute. However, not all the
-parts of the script that generate the corresponding part of the MOTD run
-every minute.
+parts of the script run every minute.
 
 So, sysmotd is comprised of:
 
@@ -120,10 +121,10 @@ To install sysmotd and its dependencies, my recommendation is to
 download the rpm package under rpmbuild/RPMS/noarch in this repo, and
 install it with dnf.
 
-    sudo dnf install sysmotd-0.0.1-1.fc37.noarch.rpm
+    sudo dnf install sysmotd-0.0.4-1.fc38.noarch.rpm
 
 If you rather not install a package from an unknown source, and I
 wouldn't blame you for that, you can clone this repo and, after
 inspecting the files listed under the structure section, copy them to
 their respective folders. Please note that if you do this, and you are
-running selinux enforced, you will have to fix the context of the files.
+running SElinux enforced, you will have to fix the context of the files.
