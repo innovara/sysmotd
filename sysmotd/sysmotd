@@ -46,10 +46,15 @@ load_15=$(awk '{print $3}' /proc/loadavg)
 # memory
 mem_total=$(awk '/MemTotal/ {print $2;}' /proc/meminfo)
 mem_used=$(($mem_total-$(awk '/MemFree/ {print $2;}' /proc/meminfo)-$(awk '/Buffers/ {print $2;}' /proc/meminfo)-$(awk '/\yCached\y/ {print $2;}' /proc/meminfo)))
+if [[ $mem_total != 0 ]]; then
+   mem_perc=$((mem_used*100/mem_total))
+else
+   mem_perc=0
+fi
 mem_perc=$(($mem_used*100/$mem_total))
 swap_total=$(awk '/SwapTotal/ {print $2;}' /proc/meminfo)
 swap_used=$((${swap_total} - $(awk '/SwapFree/ {print $2;}' /proc/meminfo)-$(awk '/SwapCached/ {print $2;}' /proc/meminfo)))
-if [[ "$swap_total" != 0 ]]; then
+if [[ $swap_total != 0 ]]; then
    swap_perc=$((swap_used*100/swap_total))
 else
    swap_perc=0
@@ -94,7 +99,7 @@ else
    sysarray+=(${se_status}';') #r3 c5
 fi
 sysarray+=('Memory usage:;') #r4 c1
-sysarray+=($((${mem_used}/1024))'/'$((${mem_total}/1024))'M;') #r4 c2
+sysarray+=($((${mem_used}/1024))'/'$((${mem_total}/1024))'M ('${mem_perc}'%);') #r4 c2
 sysarray+=($'\t;') #r4 c3
 sysarray+=('Processes:;') #r4 c4
 sysarray+=(${processes}';') #r4 c5
