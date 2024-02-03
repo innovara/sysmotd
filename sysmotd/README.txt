@@ -16,7 +16,7 @@ How it looks like
 
 A picture is worth a thousand words.
 
-https://github.com/innovara/sysmotd/blob/master/sysmotd-example.png
+![sysmotd-example.png](https://github.com/innovara/sysmotd/blob/master/sysmotd-example.png?raw=true)
 
 Background
 ==========
@@ -121,7 +121,12 @@ To install sysmotd and its dependencies, my recommendation is to
 download the rpm package under rpmbuild/RPMS/noarch in this repo, and
 install it with dnf.
 
-    sudo dnf install sysmotd-0.0.4-1.fc38.noarch.rpm
+    sudo dnf install sysmotd-0.0.4-1.fc39.noarch.rpm
+
+You can also install it directly from this repo. Head to [releases](https://github.com/innovara/sysmotd/releases) to get
+the link and then install it with dnf.
+
+    sudo dnf install https://github.com/innovara/sysmotd/releases/download/0.0.4/sysmotd-0.0.4-1.fc39.noarch.rpm
 
 If you rather not install a package from an unknown source, and I
 wouldn't blame you for that, you can clone this repo and, after
