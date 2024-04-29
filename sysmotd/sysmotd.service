@@ -7,3 +7,4 @@ User=root
 Group=root
 RemainAfterExit=no
 ExecStart=/usr/libexec/sysmotd
+LogLevelMax=3
