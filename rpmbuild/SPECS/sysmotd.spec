@@ -1,5 +1,5 @@
 Name:           sysmotd
-Version:        0.0.4
+Version:        0.0.5
 Release:        1%{?dist}
 Summary:        Generates a MOTD (Message Of The Day) including system information on Fedora Linux
 BuildArch:      noarch
@@ -39,8 +39,8 @@ mkdir -p %{buildroot}/%{_unitdir}
 %{__install} -Dm644 %{name}.service %{buildroot}/%{_unitdir}/%{name}.service
 %{__install} -Dm644 %{name}.timer %{buildroot}/%{_unitdir}/%{name}.timer
 
-
 %{__install} -Dm644 %{name}.preset %{buildroot}/%{_presetdir}/50-%{name}.preset
+
 
 %files
 %license LICENSE.txt
@@ -56,25 +56,33 @@ mkdir -p %{buildroot}/%{_unitdir}
 %systemd_post %{name}.timer
 systemctl start %{name}.timer > /dev/null 2>&1
 
+
 %preun
 
 %systemd_preun %{name}.timer
 %systemd_preun %{name}.service
 
+
 %postun
 
+%systemd_postun %{name}.timer
+%systemd_postun %{name}.service
 rm -f /run/motd.d/*%{name}*
 
 
 %changelog
+* Mon Apr 29 2024 Manuel Fombuena <mfombuena@innovara.co.uk>
+- Version 0.0.5-1: changed sysmotd.timer starting point to OnActiveSec 
+- Version 0.0.5-1: added %systemd_postun macro when uninstalling
+
 * Mon Oct 2 2023 Manuel Fombuena <mfombuena@innovara.co.uk>
-- Version 0.0.4: mem_perc re-added
+- Version 0.0.4-1: mem_perc re-added
 
 * Sun Oct 1 2023 Manuel Fombuena <mfombuena@innovara.co.uk>
-- Version 0.0.3: system information layout changed to a table to prevent misalignment of items
+- Version 0.0.3-1: system information layout changed to a table to prevent misalignment of items
 
 * Thu Apr 27 2023 Manuel Fombuena <mfombuena@innovara.co.uk>
-- Version 0.0.2: SElinux info added
+- Version 0.0.2-1: SElinux info added
 
 * Mon Dec 26 2022 Manuel Fombuena <mfombuena@innovara.co.uk>
-- Version 0.0.1: first version packaged
+- Version 0.0.1-1: first version packaged
