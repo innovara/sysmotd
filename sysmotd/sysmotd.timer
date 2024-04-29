@@ -4,7 +4,7 @@ Requires=sysmotd.service
 
 [Timer]
 Unit=sysmotd.service
-OnBootSec=15s
+OnActiveSec=15s
 OnUnitActiveSec=1m  
 
 [Install]
