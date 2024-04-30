@@ -1,5 +1,5 @@
 Name:           sysmotd
-Version:        0.0.5
+Version:        0.0.6
 Release:        1%{?dist}
 Summary:        Generates a MOTD (Message Of The Day) including system information on Fedora Linux
 BuildArch:      noarch
@@ -19,9 +19,9 @@ Requires:       procps-ng
 Requires:       systemd
 
 %description
-
 Sysmotd produces a MOTD that includes system information being collected
 on a regular basis. Users will see the MOTD when logging in via ssh.
+
 
 %prep
 %autosetup
@@ -52,25 +52,25 @@ mkdir -p %{buildroot}/%{_unitdir}
 
 
 %post
-
 %systemd_post %{name}.timer
 systemctl start %{name}.timer > /dev/null 2>&1
 
 
 %preun
-
 %systemd_preun %{name}.timer
 %systemd_preun %{name}.service
 
 
 %postun
-
 %systemd_postun %{name}.timer
 %systemd_postun %{name}.service
 rm -f /run/motd.d/*%{name}*
 
 
 %changelog
+* Tue Apr 30 2024 Manuel Fombuena <mfombuena@innovara.co.uk>
+- Version 0.0.6-1: LogLevelMax=3 added to sysmotd.service
+
 * Mon Apr 29 2024 Manuel Fombuena <mfombuena@innovara.co.uk>
 - Version 0.0.5-1: changed sysmotd.timer starting point to OnActiveSec 
 - Version 0.0.5-1: added %systemd_postun macro when uninstalling
