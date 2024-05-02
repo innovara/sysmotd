@@ -1,6 +1,5 @@
 [Unit]
 Description=Timer for sysmotd service
-Requires=sysmotd.service
 
 [Timer]
 Unit=sysmotd.service
