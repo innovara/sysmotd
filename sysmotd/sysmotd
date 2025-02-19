@@ -46,19 +46,11 @@ load_15=$(awk '{print $3}' /proc/loadavg)
 # memory
 mem_total=$(awk '/MemTotal/ {print $2;}' /proc/meminfo)
 mem_used=$(($mem_total-$(awk '/MemFree/ {print $2;}' /proc/meminfo)-$(awk '/Buffers/ {print $2;}' /proc/meminfo)-$(awk '/\yCached\y/ {print $2;}' /proc/meminfo)))
-if [[ $mem_total != 0 ]]; then
-   mem_perc=$((mem_used*100/mem_total))
-else
-   mem_perc=0
-fi
+[[ $mem_total != 0 ]] && mem_perc=$((mem_used*100/mem_total)) || mem_perc=0
 mem_perc=$(($mem_used*100/$mem_total))
 swap_total=$(awk '/SwapTotal/ {print $2;}' /proc/meminfo)
 swap_used=$((${swap_total} - $(awk '/SwapFree/ {print $2;}' /proc/meminfo)-$(awk '/SwapCached/ {print $2;}' /proc/meminfo)))
-if [[ $swap_total != 0 ]]; then
-   swap_perc=$((swap_used*100/swap_total))
-else
-   swap_perc=0
-fi
+[[ $swap_total != 0 ]] && swap_perc=$((swap_used*100/swap_total)) || swap_perc=0
 
 # filesystem info
 root_used=$(df -h --output=used / | awk '{if (NR!=1) print $1}')
@@ -73,9 +65,7 @@ processes=$(ps aux --no-headers | wc -l)
 
 # SELinux
 se_status=$(sestatus | awk '/^SELinux status:/ {print $3;}')
-if [[ "$se_status" != "disabled" ]]; then
-   se_mode=$(sestatus | awk '/^Current mode/ {print ($3);}')
-fi
+[[ "$se_status" != "disabled" ]] && se_mode=$(sestatus | awk '/^Current mode/ {print ($3);}')
 
 # input data for system info table (5x5)
 sysarray=()
@@ -93,11 +83,7 @@ sysarray+=('Load 1-5-15min:;') #r3 c1
 sysarray+=(${load_1}'-'${load_5}'-'${load_15}';') #r3 c2
 sysarray+=($'\t;') #r3 c3
 sysarray+=('SElinux:;') #r3 c4
-if [[ "$se_status" != "disabled" ]]; then
-   sysarray+=(${se_status}' ('${se_mode}');') #r3 c5
-else
-   sysarray+=(${se_status}';') #r3 c5
-fi
+[[ "$se_status" != "disabled" ]] && sysarray+=(${se_status}' ('${se_mode}');') || sysarray+=(${se_status}';') #r3 c5
 sysarray+=('Memory usage:;') #r4 c1
 sysarray+=($((${mem_used}/1024))'/'$((${mem_total}/1024))'M ('${mem_perc}'%);') #r4 c2
 sysarray+=($'\t;') #r4 c3
@@ -116,9 +102,8 @@ sysarray+=(${users}';') #r5 c5
 NEED_UPDATE="FALSE"
 [ -z "$(find "$header" -newermt 'now-60 minutes' 2> /dev/null)" ] && NEED_UPDATE="TRUE"
 
-if [[ "$NEED_UPDATE" = "TRUE" ]]; then
+[[ "$NEED_UPDATE" = "TRUE" ]] && \
    echo "$(figlet ${REDHAT_SUPPORT_PRODUCT} ${REDHAT_SUPPORT_PRODUCT_VERSION} -c | lolcat -r -f)" > $header
-fi
 
 # sysinfo update
 echo -e "Welcome to ${PRETTY_NAME} ($(uname -o) $(uname -r))
