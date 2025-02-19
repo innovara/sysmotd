@@ -1,5 +1,5 @@
 Name:           sysmotd
-Version:        0.0.7
+Version:        0.0.8
 Release:        1%{?dist}
 Summary:        Generates a MOTD (Message Of The Day) including system information on Fedora Linux
 BuildArch:      noarch
@@ -68,6 +68,12 @@ rm -f /run/motd.d/*%{name}*
 
 
 %changelog
+* Wed Feb 19 2025 Manuel Fombuena <mfombuena@innovara.co.uk>
+- Version 0.0.8-1: replace some if-else statements with shorthands
+- Version 0.0.8-1: added SPDX license identifier
+
+Signed-off-by: Manuel Fombuena <fombuena@outlook.com>
+
 * Fri May 3 2024 Manuel Fombuena <mfombuena@innovara.co.uk>
 - Version 0.0.7-1: removed Requires=sysmotd.service on sysmotd.timer
 
