@@ -1,6 +1,6 @@
 #!/usr/bin/sh
 # SPDX-License-Identifier: GPL-3.0-or-later
-# Copyright (C) 2022-2025  Manuel Fombuena <mfombuena@innovara.co.uk>
+# Copyright (C) 2022-2025  Manuel Fombuena <mfombuena@innovara.tech>
 #
 # sysmotd - generates a MOTD (Message Of The Day) including system 
 # information on Fedora Linux, and possibly other Red Hat-based distributions.

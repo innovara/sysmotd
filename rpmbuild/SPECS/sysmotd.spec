@@ -68,30 +68,30 @@ rm -f /run/motd.d/*%{name}*
 
 
 %changelog
-* Wed Feb 19 2025 Manuel Fombuena <mfombuena@innovara.co.uk>
+* Wed Feb 19 2025 Manuel Fombuena <mfombuena@innovara.tech>
 - Version 0.0.8-1: replace some if-else statements with shorthands
 - Version 0.0.8-1: added SPDX license identifier
 
 Signed-off-by: Manuel Fombuena <fombuena@outlook.com>
 
-* Fri May 3 2024 Manuel Fombuena <mfombuena@innovara.co.uk>
+* Fri May 3 2024 Manuel Fombuena <mfombuena@innovara.tech>
 - Version 0.0.7-1: removed Requires=sysmotd.service on sysmotd.timer
 
-* Tue Apr 30 2024 Manuel Fombuena <mfombuena@innovara.co.uk>
+* Tue Apr 30 2024 Manuel Fombuena <mfombuena@innovara.tech>
 - Version 0.0.6-1: LogLevelMax=3 added to sysmotd.service
 
-* Mon Apr 29 2024 Manuel Fombuena <mfombuena@innovara.co.uk>
+* Mon Apr 29 2024 Manuel Fombuena <mfombuena@innovara.tech>
 - Version 0.0.5-1: changed sysmotd.timer starting point to OnActiveSec 
 - Version 0.0.5-1: added %systemd_postun macro when uninstalling
 
-* Mon Oct 2 2023 Manuel Fombuena <mfombuena@innovara.co.uk>
+* Mon Oct 2 2023 Manuel Fombuena <mfombuena@innovara.tech>
 - Version 0.0.4-1: mem_perc re-added
 
-* Sun Oct 1 2023 Manuel Fombuena <mfombuena@innovara.co.uk>
+* Sun Oct 1 2023 Manuel Fombuena <mfombuena@innovara.tech>
 - Version 0.0.3-1: system information layout changed to a table to prevent misalignment of items
 
-* Thu Apr 27 2023 Manuel Fombuena <mfombuena@innovara.co.uk>
+* Thu Apr 27 2023 Manuel Fombuena <mfombuena@innovara.tech>
 - Version 0.0.2-1: SElinux info added
 
-* Mon Dec 26 2022 Manuel Fombuena <mfombuena@innovara.co.uk>
+* Mon Dec 26 2022 Manuel Fombuena <mfombuena@innovara.tech>
 - Version 0.0.1-1: first version packaged

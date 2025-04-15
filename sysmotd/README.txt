@@ -117,15 +117,14 @@ To install sysmotd and its dependencies, head to [releases](https://github.com/i
 and get the link to the rpm package for your system. Then use it to install
 it with dnf.
 
-    sudo dnf install https://github.com/innovara/sysmotd/releases/download/0.0.8/sysmotd-0.0.8-1.fc41.noarch.rpm
+    sudo dnf install https://github.com/innovara/sysmotd/releases/download/0.0.8/sysmotd-0.0.8-1.fc42.noarch.rpm
 
 You can of course also download the rpm and install it with dnf.
 
-    sudo dnf install sysmotd-0.0.8-1.fc41.noarch.rpm
+    sudo dnf install sysmotd-0.0.8-1.fc42.noarch.rpm
 
 And you can also build your own rpm using `rpmbuild.sh`. Clone this repository
-and run the script. It will automatically pick the version for the .spec file
-and the resulting rpm package will be under `rpmbuild/RPMS/noarch`.
+and run the script. The resulting rpm package will be under `./rpmbuild/RPMS/noarch`.
 
 If you rather not install a package from an unknown source, and I wouldn't
 blame you for that, you can clone this repo and, after inspecting the files
