@@ -122,7 +122,7 @@ NEED_UPDATE="FALSE"
 [ -z "$(find "$updates" -newermt 'now-60 minutes' 2> /dev/null)" ] && NEED_UPDATE="TRUE"
 
 if [[ "$NEED_UPDATE" = "TRUE" ]]; then
-   n_updates=$(dnf update --assumeno --cacheonly --noplugins | awk '/^Upgrade/ {print $2;}')
+   n_updates=$(dnf update --assumeno --cacheonly --noplugins | awk '/^ Upgrading/ {print $2;}')
    if [[ $n_updates -eq 0 ]]; then
       echo -e "There were no updates available when last checked.\n" > $updates
    elif [[ $n_updates -eq 1 ]]; then
