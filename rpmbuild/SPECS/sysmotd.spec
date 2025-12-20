@@ -1,12 +1,14 @@
 Name:           sysmotd
 Version:        0.0.9
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        Generates a Message of the Day (MOTD) with system information for Fedora Linux
 BuildArch:      noarch
 
 License:        GPLv3+
 URL:            https://github.com/innovara/sysmotd
 Source0:        %{name}-%{version}.tar.gz
+
+BuildRequires:  systemd-rpm-macros
 
 Requires:       bash
 Requires:       coreutils
@@ -68,6 +70,9 @@ rm -f /run/motd.d/*%{name}*
 
 
 %changelog
+* Sat Dec 20 2025 Manuel Fombuena <mfombuena@innovara.tech> - 0.0.9-3
+- Add systemd-rpm-macros to BuildRequires
+
 * Fri Oct 31 2025 Manuel Fombuena <mfombuena@innovara.tech> - 0.0.9-2
 - Implement rpmlint fixes
 
