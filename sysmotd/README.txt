@@ -1,12 +1,13 @@
 Summary
 =======
 
-sysmotd is essentially a shell script that produces a Message Of The Day (MOTD)
-with system information and statistics.
+`sysmotd` is essentially a shell script that produces a Message Of The Day
+(MOTD) with system information and statistics.
 
-It has been developed and tested on Fedora Linux and it might work on other
-Red Hat-based distributions with very small tweaks. It should also be
-relatively simple to port it to other distributions that don't have their own
+It has been developed and tested on Fedora Linux and AlmaLinux. AlmaLinux
+requires the EPEL repositories for localt. It may also work on other Red Hat
+based distributions with very small tweaks, or none at all. It should be
+relatively simple to port to other distributions that do not have their own
 dynamic MOTD generator.
 
 At the time of writing, Fedora only uses `pam_motd.so` for ssh log ins.
@@ -21,11 +22,11 @@ A picture is worth a thousand words.
 Background
 ==========
 
-I am a long term Fedora user. Having worked with some Ubuntu servers lately, I
-found myself missing the system information and statistics that you get when
-you log in. When I installed Fedora 37 on a Raspberry Pi4, I saw that cockpit
-would generate an MOTD, and I decided to research how to add my own message
-with system information in it.
+I am a long term Fedora user. Having worked with some Ubuntu servers a while
+ago, I found myself missing the system information and statistics that you get
+when you log in. When I installed Fedora 37 on a Raspberry Pi4, I saw that
+cockpit would generate an MOTD, and I decided to research how to add my own
+message with system information in it.
 
 Out of the various sources I found, I would like to give credit to a couple of
 them that helped me a lot in figuring out how to get the information that I
@@ -117,11 +118,11 @@ To install sysmotd and its dependencies, head to [releases](https://github.com/i
 and get the link to the rpm package for your system. Then use it to install
 it with dnf.
 
-    sudo dnf install https://github.com/innovara/sysmotd/releases/download/0.0.8/sysmotd-0.0.8-1.fc42.noarch.rpm
+    sudo dnf install https://github.com/innovara/sysmotd/releases/download/0.0.9/sysmotd-0.0.9-3.fc43.noarch.rpm
 
 You can of course also download the rpm and install it with dnf.
 
-    sudo dnf install sysmotd-0.0.8-1.fc42.noarch.rpm
+    sudo dnf install sysmotd-0.0.9-3.fc43.noarch.rpm
 
 And you can also build your own rpm using `rpmbuild.sh`. Clone this repository
 and run the script. The resulting rpm package will be under `./rpmbuild/RPMS/noarch`.
@@ -131,4 +132,3 @@ blame you for that, you can clone this repo and, after inspecting the files
 listed under the structure section, copy them to their respective folders.
 Please note that if you do this, and you are running SElinux enforced, you
 will have to fix the context of the files.
-
