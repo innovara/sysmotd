@@ -1,6 +1,6 @@
 Name:           sysmotd
-Version:        0.0.9
-Release:        3%{?dist}
+Version:        0.0.10
+Release:        1%{?dist}
 Summary:        Generates a Message of the Day (MOTD) with system information for Fedora Linux
 BuildArch:      noarch
 
@@ -70,6 +70,9 @@ rm -f /run/motd.d/*%{name}*
 
 
 %changelog
+* Sat Mar 7 2026 Manuel Fombuena <mfombuena@innovara.tech> - 0.0.10-1
+- Fix update count for dnf4 compatibility
+
 * Sat Dec 20 2025 Manuel Fombuena <mfombuena@innovara.tech> - 0.0.9-3
 - Add systemd-rpm-macros to BuildRequires
 
