@@ -2,7 +2,7 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 # Copyright (C) 2022-2025  Manuel Fombuena <mfombuena@innovara.tech>
 #
-# sysmotd - generates a MOTD (Message Of The Day) including system 
+# sysmotd - generates a MOTD (Message Of The Day) including system
 # information on Fedora Linux, and possibly other Red Hat-based distributions.
 #
 # This program is free software: you can redistribute it and/or modify
@@ -17,7 +17,7 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
-#  
+#
 
 # directory where the motd files will live
 rundir="/run/motd.d"
@@ -116,13 +116,17 @@ printf '%s %s %s %s %s\n' "${sysarray[@]}" | column -t -s $';' >> $sysinfo
 echo -e "" >> $sysinfo
 
 # available updates refreshes every 60 minutes using CACHE.
-# dnf's cache is updated by the system using its own service and timer. The conservative 
+# dnf's cache is updated by the system using its own service and timer. The conservative
 # approach is to not to change this.
 NEED_UPDATE="FALSE"
 [ -z "$(find "$updates" -newermt 'now-60 minutes' 2> /dev/null)" ] && NEED_UPDATE="TRUE"
 
 if [[ "$NEED_UPDATE" = "TRUE" ]]; then
-   n_updates=$(dnf update --assumeno --cacheonly --noplugins | awk '/^ Upgrading/ {print $2;}')
+   n_updates=$(dnf upgrade --assumeno --cacheonly --noplugins 2>/dev/null | awk '
+      /Upgrading:|Installing:|^Upgrade |^Install / { n+=$2 }
+      END { print n+0 }
+   ')
+
    if [[ $n_updates -eq 0 ]]; then
       echo -e "There were no updates available when last checked.\n" > $updates
    elif [[ $n_updates -eq 1 ]]; then
