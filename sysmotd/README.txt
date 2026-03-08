@@ -99,8 +99,7 @@ available every 60 minutes.
 How to install sysmotd and its dependencies
 ===========================================
 
-These are the Fedora packages that you need to have installed for sysmotd to
-work:
+These are the packages that you need to have installed for sysmotd to work:
 
 bash
 coreutils
@@ -112,17 +111,29 @@ lolcat
 procps-ng
 systemd
 
-Most systems will have all of them installed apart from figlet and lolcat.
+Most systems will have all of them installed apart from figlet and lolcat. Both
+are available in the Fedora repositories. AlmaLinux users will need to either
+enable the EPEL repository or install lolcat from the
+[releases](https://github.com/innovara/sysmotd/releases) page, where a lolcat
+rpm is included.
 
-To install sysmotd and its dependencies, head to [releases](https://github.com/innovara/sysmotd/releases) 
+Once the dependencies are in place, there are several ways to install sysmotd.
+
+There is a COPR repository available. AlmaLinux users must enable EPEL first
+(see above). To enable the COPR repo and install sysmotd:
+
+    sudo dnf copr enable mandolin/sysmotd
+    sudo dnf install sysmotd
+
+Alternatively, head to [releases](https://github.com/innovara/sysmotd/releases)
 and get the link to the rpm package for your system. Then use it to install
 it with dnf.
 
-    sudo dnf install https://github.com/innovara/sysmotd/releases/download/0.0.9/sysmotd-0.0.9-3.fc43.noarch.rpm
+    sudo dnf install https://github.com/innovara/sysmotd/releases/download/0.0.10/sysmotd-0.0.10-1.fc43.noarch.rpm
 
 You can of course also download the rpm and install it with dnf.
 
-    sudo dnf install sysmotd-0.0.9-3.fc43.noarch.rpm
+    sudo dnf install sysmotd-0.0.10-1.fc43.noarch.rpm
 
 And you can also build your own rpm using `rpmbuild.sh`. Clone this repository
 and run the script. The resulting rpm package will be under `./rpmbuild/RPMS/noarch`.
