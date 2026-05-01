@@ -119,10 +119,10 @@ rpm is included.
 
 Once the dependencies are in place, there are several ways to install sysmotd.
 
-There is a COPR repository available. AlmaLinux users must enable EPEL first
-(see above). To enable the COPR repo and install sysmotd:
+There is a Copr repository available. AlmaLinux users must enable EPEL first
+(see above). To enable the Copr repo and install sysmotd:
 
-    sudo dnf copr enable mandolin/sysmotd
+    sudo dnf copr enable mandolin/innovara
     sudo dnf install sysmotd
 
 Alternatively, head to [releases](https://github.com/innovara/sysmotd/releases)
