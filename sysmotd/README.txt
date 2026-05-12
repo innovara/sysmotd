@@ -129,11 +129,11 @@ Alternatively, head to [releases](https://github.com/innovara/sysmotd/releases)
 and get the link to the rpm package for your system. Then use it to install
 it with dnf.
 
-    sudo dnf install https://github.com/innovara/sysmotd/releases/download/0.0.10/sysmotd-0.0.10-1.fc43.noarch.rpm
+    sudo dnf install https://github.com/innovara/sysmotd/releases/download/1.0/sysmotd-1.0-1.fc44.noarch.rpm
 
 You can of course also download the rpm and install it with dnf.
 
-    sudo dnf install sysmotd-0.0.10-1.fc43.noarch.rpm
+    sudo dnf install sysmotd-1.0-1.fc44.noarch.rpm
 
 And you can also build your own rpm using `rpmbuild.sh`. Clone this repository
 and run the script. The resulting rpm package will be under `./rpmbuild/RPMS/noarch`.
