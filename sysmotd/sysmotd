@@ -67,31 +67,53 @@ processes=$(ps aux --no-headers | wc -l)
 se_status=$(sestatus | awk '/^SELinux status:/ {print $3;}')
 [[ "$se_status" != "disabled" ]] && se_mode=$(sestatus | awk '/^Current mode/ {print ($3);}')
 
+# temperature (average across all sensors; falls back to thermal zones)
+temp="N/A"
+temp_sum=0
+temp_count=0
+if [ -d /sys/class/hwmon ]; then
+    for temp_file in /sys/class/hwmon/*/temp*_input; do
+        [ -f "$temp_file" ] || continue
+        temp_raw=$(cat "$temp_file" 2>/dev/null) || continue
+        temp_sum=$((temp_sum + temp_raw))
+        temp_count=$((temp_count + 1))
+    done
+fi
+if [[ $temp_count -eq 0 ]] && [ -d /sys/class/thermal ]; then
+    for temp_file in /sys/class/thermal/*/temp; do
+        [ -f "$temp_file" ] || continue
+        temp_raw=$(cat "$temp_file" 2>/dev/null) || continue
+        temp_sum=$((temp_sum + temp_raw))
+        temp_count=$((temp_count + 1))
+    done
+fi
+[[ $temp_count -gt 0 ]] && temp=$(awk "BEGIN {printf \"%.1f°C\", $temp_sum / $temp_count / 1000}")
+
 # input data for system info table (5x5)
 sysarray=()
 sysarray+=('Hostname:;') #r1 c1
 sysarray+=(${hostname}';') #r1 c2
 sysarray+=($'\t;') #r1 c3
-sysarray+=(';') #r1 c4
-sysarray+=(';') #r1 c5
+sysarray+=('Memory usage:;') #r1 c4
+sysarray+=($((${mem_used}/1024))'/'$((${mem_total}/1024))'M ('${mem_perc}'%);') #r1 c5
 sysarray+=('Uptime:;') #r2 c1
 sysarray+=(${up_days}'d '${up_hours}'h '${up_mins}'m '${up_secs}'s;') #r2 c2
 sysarray+=($'\t;') #r2 c3
-sysarray+=('Usage of /:;') #r2 c4
-sysarray+=(${root_used}'/'${root_total}' ('${root_perc}');') #r2 c5
+sysarray+=('Swap usage:;') #r2 c4
+sysarray+=($((${swap_used}/1024))'/'$((${swap_total}/1024))'M ('${swap_perc}'%);') #r2 c5
 sysarray+=('Load 1-5-15min:;') #r3 c1
 sysarray+=(${load_1}'-'${load_5}'-'${load_15}';') #r3 c2
 sysarray+=($'\t;') #r3 c3
 sysarray+=('SElinux:;') #r3 c4
 [[ "$se_status" != "disabled" ]] && sysarray+=(${se_status}' ('${se_mode}');') || sysarray+=(${se_status}';') #r3 c5
-sysarray+=('Memory usage:;') #r4 c1
-sysarray+=($((${mem_used}/1024))'/'$((${mem_total}/1024))'M ('${mem_perc}'%);') #r4 c2
+sysarray+=('Avg temp:;') #r4 c1
+sysarray+=(${temp}';') #r4 c2
 sysarray+=($'\t;') #r4 c3
 sysarray+=('Processes:;') #r4 c4
 sysarray+=(${processes}';') #r4 c5
-sysarray+=('Swap usage:;') #r5 c1
-sysarray+=($((${swap_used}/1024))'/'$((${swap_total}/1024))'M ('${swap_perc}'%);') #r5 c2
-sysarray+=($'\t;') #r3 c3
+sysarray+=('Usage of /:;') #r5 c1
+sysarray+=(${root_used}'/'${root_total}' ('${root_perc}');') #r5 c2
+sysarray+=($'\t;') #r5 c3
 sysarray+=('Users:;') #r5 c4
 sysarray+=(${users}';') #r5 c5
 
