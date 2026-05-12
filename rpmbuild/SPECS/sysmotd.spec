@@ -1,5 +1,5 @@
 Name:           sysmotd
-Version:        0.0.10
+Version:        1.0
 Release:        1%{?dist}
 Summary:        Generates a Message of the Day (MOTD) with system information for Fedora Linux
 BuildArch:      noarch
@@ -70,6 +70,11 @@ rm -f /run/motd.d/*%{name}*
 
 
 %changelog
+* Tue May 12 2026 Manuel Fombuena <mfombuena@innovara.tech> - 1.0-1
+- Add average temperature to system information table
+- Reorganise system information table layout
+- Consolidate packages into mandolin/innovara Copr repository
+
 * Sat Mar 7 2026 Manuel Fombuena <mfombuena@innovara.tech> - 0.0.10-1
 - Fix update count for dnf4 compatibility
 
