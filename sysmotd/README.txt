@@ -17,7 +17,7 @@ How it looks like
 
 A picture is worth a thousand words.
 
-![sysmotd-example.png](https://github.com/innovara/sysmotd/blob/master/sysmotd-example.png?raw=true)
+![sysmotd-example.png](https://github.com/innovara/sysmotd/blob/main/sysmotd-example.png?raw=true)
 
 Background
 ==========
